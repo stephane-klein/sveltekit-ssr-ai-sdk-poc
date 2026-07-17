@@ -37,6 +37,27 @@ These files are marked with comments (`-- Example` / `// Example`) at the top. R
 
 This project uses **Jujutsu** for version control.
 
+## Project Structure
+
+- `src/routes/chats/` — chat UI and API
+  - `+page.svelte` / `+page.server.js` — conversation list + create
+  - `[slug]/+page.svelte` / `[slug]/+page.server.js` — single chat page
+  - `[slug]/+server.js` — AI chat API endpoint (streaming response)
+- `src/lib/ai.js` — Vercel AI SDK model provider configuration (OpenCode Go / DeepSeek V4 Flash)
+- `src/db.js` — PostgreSQL connection (via `postgres` library)
+
+## AI SDK / LLM Provider
+
+This project uses [Vercel AI SDK](https://sdk.vercel.ai) (`ai` v7) with:
+- `@ai-sdk/openai-compatible` — provider connected to [OpenCode Go](https://opencode.ai) serving DeepSeek V4 Flash
+- `@ai-sdk/svelte` — Svelte integration for reactive chat UI
+
+The LLM endpoint and API key are configured via environment variables (see `.secret.example`).
+
+## Validation
+
+[Zod](https://zod.dev) v4 is used for runtime validation of tool schemas and LLM responses.
+
 ## Documentation Maintenance
 
 Remove from this file any section or reference that becomes obsolete after file deletions or structural changes. Keep AGENTS.md up to date.

@@ -13,6 +13,10 @@ This project is a POC to learn how to integrate [Vercel AI SDK](https://sdk.verc
 - **DB schema**: [sqls/schema.sql](./sqls/schema.sql)
 - **Containers**: Podman Compose
 - **Tooling**: mise
+- **AI SDK**: [Vercel AI SDK](https://sdk.vercel.ai) (`ai` v7)
+  - `@ai-sdk/openai-compatible` — OpenAI-compatible provider (connected to OpenCode Go — DeepSeek V4 Flash)
+  - `@ai-sdk/svelte` — Svelte integration
+- **Validation**: [Zod](https://zod.dev) v4
 
 ## AI-Assisted Development
 
@@ -24,7 +28,7 @@ This project was developed using:
 ## Roadmap
 
 - [x] Setup SvelteKit SSR
-- [ ] First AI SDK integration — minimalistic web chat
+- [x] First AI SDK integration — minimalistic web chat
 - [ ] Implement a tool to read from the PostgreSQL database
 
 ## Prerequisite

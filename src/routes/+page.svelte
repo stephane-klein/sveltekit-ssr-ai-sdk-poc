@@ -3,3 +3,4 @@
 <p>Welcome to the SvelteKit SSR + Vercel AI SDK POC.</p>
 
 <p><a href="/contacts">View contacts</a></p>
+<p><a href="/chats">Chat with AI</a></p>
