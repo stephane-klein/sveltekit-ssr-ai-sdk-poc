@@ -28,8 +28,6 @@ The following files are examples meant to be replaced with your actual project c
 
 - `sqls/fixtures/00001_contacts.sql` — example fixture data
 - `sqls/schema.sql` — example consolidated schema
-- `src/hello_world.js` — example script demonstrating database access
-- `README.md` — update the example output in the Getting Started section when replacing `src/hello_world.js`
 
 These files are marked with comments (`-- Example` / `// Example`) at the top. Replace or remove them as needed.
 
