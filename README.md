@@ -4,13 +4,15 @@ This project is a POC to learn how to integrate [Vercel AI SDK](https://sdk.verc
 
 ## Tech Stack
 
-- Runtime: Node.js 24 (ESM)
-- Package manager: pnpm
-- Database: PostgreSQL 18
-- SQL client: [postgres](https://github.com/porsager/postgres)
-- DB schema: [sqls/schema.sql](./sqls/schema.sql)
-- Containers: Podman Compose
-- Tooling: mise
+- **Frontend**: SvelteKit 2 (SSR) + Svelte 5 + Vite 8
+- **Adapter**: `@sveltejs/adapter-node` — standalone Node.js server
+- **Runtime**: Node.js 24 (ESM)
+- **Package manager**: pnpm
+- **Database**: PostgreSQL 18
+- **SQL client**: [postgres](https://github.com/porsager/postgres)
+- **DB schema**: [sqls/schema.sql](./sqls/schema.sql)
+- **Containers**: Podman Compose
+- **Tooling**: mise
 
 ## AI-Assisted Development
 
@@ -29,7 +31,7 @@ This project was developed using:
 
 ## Roadmap
 
-- [ ] Setup SvelteKit SSR
+- [x] Setup SvelteKit SSR
 - [ ] First AI SDK integration — minimalistic web chat
 - [ ] Implement a tool to read from the PostgreSQL database
 
@@ -51,7 +53,9 @@ For Stéphane Klein (gopass user), generate `.secret` directly from the password
 ```bash
 $ mise run setup-secret
 ```
+
 Mise loads `.secret` automatically when present — no additional setup needed.
+
 ## Getting Started
 
 ```bash
@@ -61,29 +65,12 @@ $ mise run up   # start PostgreSQL container
 $ reload        # load environment variables
 $ mise load-schema  # load database schema from sqls/schema.sql
 $ mise seed     # populate with demo data
-$ ./src/hello_world.js  # sample application
-contacts: Result(3) [
-  {
-    id: '1',
-    firstname: 'Alice',
-    lastname: 'Martin',
-    created_at: 2026-05-24T14:08:06.606Z
-  },
-  {
-    id: '2',
-    firstname: 'Bob',
-    lastname: 'Durand',
-    created_at: 2026-05-24T14:08:06.606Z
-  },
-  {
-    id: '3',
-    firstname: 'Charlie',
-    lastname: 'Petit',
-    created_at: 2026-05-24T14:08:06.606Z
-  }
-]
-$ mise teardown # stop the database and delete all data
 
+# Start the SvelteKit dev server
+$ pnpm run dev
+
+# Stop the database
+$ mise teardown
 ```
 
 
