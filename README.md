@@ -21,14 +21,6 @@ This project was developed using:
 - [OpenCode](https://opencode.ai) CLI — coding assistant workflow (not vibe coding)
 - Models: DeepSeek V4 Flash
 
-## Principles
-
-- Monorepository and monolithic application pattern ([notes](https://notes.sklein.xyz/2025-05-06_2224/zen/))
-- Raw SQL — no ORM
-- Trying to embrace [Radical Simplicity](https://www.radicalsimpli.city/): reducing accidental complexity, applying LEAN techniques
-- Vigilance against [cargo cult](https://en.wikipedia.org/wiki/Cargo_cult)
-- Following [YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it)
-
 ## Roadmap
 
 - [x] Setup SvelteKit SSR
