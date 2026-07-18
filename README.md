@@ -11,6 +11,8 @@ This project is a POC to learn how to integrate [Vercel AI SDK](https://sdk.verc
 - **Database**: PostgreSQL 18
 - **SQL client**: [postgres](https://github.com/porsager/postgres)
 - **DB schema**: [sqls/schema.sql](./sqls/schema.sql)
+- **DB security**: dedicated `ai_readonly` PostgreSQL role with SELECT-only privileges on the `contacts` table (grants in [sqls/rls/](./sqls/rls/))
+- **AI SQL tool**: `readOnlySqlQuery` — a Vercel AI SDK tool that lets the LLM execute read-only SQL queries against PostgreSQL via the `ai_readonly` role (see [src/lib/server/sql-query-tool.js](./src/lib/server/sql-query-tool.js))
 - **Containers**: Podman Compose
 - **Tooling**: mise
 - **AI SDK**: [Vercel AI SDK](https://sdk.vercel.ai) (`ai` v7)
@@ -29,7 +31,7 @@ This project was developed using:
 
 - [x] Setup SvelteKit SSR
 - [x] First AI SDK integration — minimalistic web chat
-- [ ] Implement a tool to read from the PostgreSQL database
+- [x] Implement a tool to read from the PostgreSQL database
 
 ## Prerequisite
 

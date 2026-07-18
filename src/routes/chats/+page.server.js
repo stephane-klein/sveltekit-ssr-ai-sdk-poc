@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { sql } from '../../db.js';
+import { sql } from '$lib/server/db.js';
 import { generateSlug } from '$lib/slug.js';
 
 export async function load() {

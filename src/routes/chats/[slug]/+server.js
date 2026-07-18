@@ -1,7 +1,8 @@
 import { error } from '@sveltejs/kit';
-import { streamText, toUIMessageStream, createUIMessageStreamResponse } from 'ai';
+import { streamText, toUIMessageStream, createUIMessageStreamResponse, isStepCount } from 'ai';
 import { model } from '$lib/ai.js';
-import { sql } from '../../../db.js';
+import { sql } from '$lib/server/db.js';
+import { readOnlySqlQuery } from '$lib/server/sql-query-tool.js';
 import { logger } from '../../../logger.js';
 
 function formatDuration(ms) {
@@ -49,6 +50,11 @@ export const POST = async ({ request, params }) => {
   const prepEnd = performance.now();
   const dbPrepMs = prepEnd - reqStart;
 
+  const latestUserMessage = modelMessages.filter(m => m.role === 'user').at(-1);
+  if (latestUserMessage) {
+    logger.info({ conversationId, content: latestUserMessage.content }, 'Sending user message to LLM');
+  }
+
   logger.info({
     conversationId,
     modelMessagesCount: modelMessages.length,
@@ -63,7 +69,11 @@ export const POST = async ({ request, params }) => {
   const result = streamText({
     model,
     messages: modelMessages,
-    system: 'You are a helpful assistant. Answer directly and concisely.',
+    system: 'You are a helpful assistant with database access. You can use the readOnlySqlQuery tool to query the contacts table. Answer directly and concisely.',
+    tools: {
+      readOnlySqlQuery,
+    },
+    stopWhen: isStepCount(5),
     reasoning: reasoningLevel !== 'none' ? reasoningLevel : undefined,
     onChunk: async ({ chunk }) => {
       if (chunk.type === 'text-delta' && firstChunkTime === null) {
@@ -76,6 +86,14 @@ export const POST = async ({ request, params }) => {
           time_to_db_prep_ms: Math.round(streamStart - reqStart),
           time_to_db_prep: formatDuration(streamStart - reqStart),
         }, 'First token received');
+      }
+
+      if (chunk.type === 'tool-call') {
+        logger.info({
+          conversationId,
+          toolName: chunk.toolName,
+          args: chunk.args,
+        }, 'Tool call');
       }
     },
     onFinish: async (event) => {

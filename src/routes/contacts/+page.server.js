@@ -1,4 +1,4 @@
-import { sql } from '../../db.js';
+import { sql } from '$lib/server/db.js';
 
 export async function load() {
   const contacts = await sql`

@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
-import { sql, waitForDb } from "../src/db.js";
+import { sql, waitForDb } from "../src/lib/server/db.js";
 
 await waitForDb();
 
