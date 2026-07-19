@@ -37,14 +37,44 @@ These files are marked with comments (`-- Example` / `// Example`) at the top. R
 
 This project uses **Jujutsu** for version control.
 
+## MCP Server
+
+This project exposes an [MCP](https://modelcontextprotocol.io) server with the tools from `src/lib/server/sql-query-tool.js` and `src/lib/server/skills/index.js`.
+
+**Available tools:**
+- `readOnlySqlQuery` — Execute a read-only SQL query against the PostgreSQL database
+- `listSkills` — List all available skills
+- `loadSkill` — Load a skill's instructions by name
+
+The MCP endpoint is served directly by SvelteKit — no separate process needed.
+
+### Dev mode
+
+```bash
+pnpm run dev
+```
+
+MCP endpoint available at `http://localhost:5173/mcp` (same port as SvelteKit dev server).
+
+### Production mode
+
+```bash
+pnpm build
+node build
+```
+
+MCP endpoint available at `http://localhost:3000/mcp` (same port).
+
 ## Project Structure
 
 - `src/routes/chats/` — chat UI and API
   - `+page.svelte` / `+page.server.js` — conversation list + create
   - `[slug]/+page.svelte` / `[slug]/+page.server.js` — single chat page
   - `[slug]/+server.js` — AI chat API endpoint (streaming response)
+- `src/routes/mcp/+server.js` — MCP server endpoint (Streamable HTTP transport)
 - `src/lib/ai.js` — Vercel AI SDK model provider configuration (OpenCode Go / DeepSeek V4 Flash)
 - `src/db.js` — PostgreSQL connection (via `postgres` library)
+- `src/lib/server/mcp-tools.js` — MCP tool definitions bridging AI SDK → MCP SDK
 
 ## AI SDK / LLM Provider
 

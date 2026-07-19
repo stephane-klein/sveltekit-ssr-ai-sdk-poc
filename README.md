@@ -9,6 +9,7 @@ This project is a POC to learn how to integrate [Vercel AI SDK](https://sdk.verc
 - **Streaming responses** — real-time token-by-token streaming for a responsive chat experience
 - **Skill system** — OpenCode-inspired skills reproduced as AI SDK tools: the LLM discovers available skills by name and description, then loads them on demand via a `loadSkill` tool (see [src/lib/server/skills/](./src/lib/server/skills/))
 - **Conversation title generation** — a button in the chat page that uses the LLM to generate a concise title from the conversation content, saves it to the database, and updates the UI in real time
+- **MCP server** — [Model Context Protocol](https://modelcontextprotocol.io) server exposing the AI tools (`readOnlySqlQuery`, `listSkills`, `loadSkill`) over Streamable HTTP, served directly by SvelteKit at `/mcp`
 
 ## Tech Stack
 
@@ -27,6 +28,7 @@ This project is a POC to learn how to integrate [Vercel AI SDK](https://sdk.verc
   - `@ai-sdk/openai-compatible` — OpenAI-compatible provider (connected to OpenCode Go — DeepSeek V4 Flash)
   - `@ai-sdk/svelte` — Svelte integration
 - **Validation**: [Zod](https://zod.dev) v4
+- **MCP SDK**: [Model Context Protocol TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk) (`@modelcontextprotocol/sdk` v1) — MCP server exposed as a SvelteKit route via `WebStandardStreamableHTTPServerTransport`
 - **Skill architecture**: skills are implemented as AI SDK `tool` definitions (not `HarnessAgent`) — the Vercel AI SDK `HarnessAgent` was evaluated but deemed unsuitable for a chat context as it is designed for coding agent harnesses (sandboxed terminal environments), not streaming chat conversations
 
 ## AI-Assisted Development
@@ -81,6 +83,65 @@ $ pnpm run dev
 
 # Stop the database
 $ mise teardown
+```
+
+## Connecting an MCP Client
+
+This project exposes an [MCP](https://modelcontextprotocol.io) server with three tools:
+
+| Tool | Description |
+|------|-------------|
+| `readOnlySqlQuery` | Execute read-only SQL queries against the PostgreSQL database |
+| `listSkills` | List all available skills |
+| `loadSkill` | Load a skill's instructions by name |
+
+The MCP endpoint is served directly by SvelteKit — no separate process needed.
+
+### Dev mode
+
+```bash
+$ pnpm run dev
+```
+
+MCP endpoint available at `http://localhost:5173/mcp`.
+
+### Production mode
+
+```bash
+$ pnpm build
+$ node build
+```
+
+MCP endpoint available at `http://localhost:3000/mcp`.
+
+### Claude Desktop
+
+Add to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "sveltekit-ssr-ai-sdk-poc": {
+      "type": "remote",
+      "url": "http://127.0.0.1:5173/mcp"
+    }
+  }
+}
+```
+
+### OpenCode
+
+Add to your project's `opencode.jsonc` or `~/.config/opencode/opencode.jsonc`:
+
+```json
+{
+  "mcpServers": {
+    "sveltekit-ssr-ai-sdk-poc": {
+      "type": "remote",
+      "url": "http://127.0.0.1:5173/mcp"
+    }
+  }
+}
 ```
 
 
