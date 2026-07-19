@@ -1,8 +1,10 @@
 import { error } from '@sveltejs/kit';
-import { streamText, toUIMessageStream, createUIMessageStreamResponse, isStepCount } from 'ai';
+import { streamText, toUIMessageStream, createUIMessageStreamResponse, isStepCount, tool } from 'ai';
+import { z } from 'zod';
 import { model } from '$lib/ai.js';
 import { sql } from '$lib/server/db.js';
 import { readOnlySqlQuery } from '$lib/server/sql-query-tool.js';
+import { listSkills, loadSkill as loadSkillContent } from '$lib/server/skills/index.js';
 import { logger } from '../../../logger.js';
 
 function formatDuration(ms) {
@@ -69,9 +71,29 @@ export const POST = async ({ request, params }) => {
   const result = streamText({
     model,
     messages: modelMessages,
-    system: 'You are a helpful assistant with database access. You can use the readOnlySqlQuery tool to query the contacts table. Answer directly and concisely.',
+    system: `You are a helpful assistant with database access. You can use the readOnlySqlQuery tool to query the contacts table. Answer directly and concisely.
+
+Available skills:
+${listSkills().map(s => `- ${s.name}: ${s.description}`).join('\n')}
+Use the loadSkill tool to load a skill's content when relevant.`,
     tools: {
       readOnlySqlQuery,
+      loadSkill: tool({
+        description: 'Load a skill by name to get specialized instructions. Call this when a user request matches a skill description.',
+        inputSchema: z.object({
+          name: z.string().describe('The skill name to load'),
+        }),
+        execute: async ({ name }) => {
+          logger.debug({ conversationId, skillName: name }, 'loadSkill tool called');
+          const content = loadSkillContent(name);
+          if (!content) {
+            logger.warn({ conversationId, skillName: name }, 'loadSkill tool: skill not found');
+            return `Skill "${name}" not found. Available skills: ${listSkills().map(s => s.name).join(', ')}`;
+          }
+          logger.info({ conversationId, skillName: name, contentLength: content.length }, 'loadSkill tool: skill loaded successfully');
+          return `--- Skill "${name}" loaded ---\n${content}`;
+        },
+      }),
     },
     stopWhen: isStepCount(5),
     reasoning: reasoningLevel !== 'none' ? reasoningLevel : undefined,

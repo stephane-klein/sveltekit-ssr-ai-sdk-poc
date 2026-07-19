@@ -7,6 +7,7 @@ This project is a POC to learn how to integrate [Vercel AI SDK](https://sdk.verc
 - **AI Chat interface** — chat UI with conversation list and message history
 - **AI SQL tool** — `readOnlySqlQuery` tool that lets the LLM query the `contacts` table using raw SQL
 - **Streaming responses** — real-time token-by-token streaming for a responsive chat experience
+- **Skill system** — OpenCode-inspired skills reproduced as AI SDK tools: the LLM discovers available skills by name and description, then loads them on demand via a `loadSkill` tool (see [src/lib/server/skills/](./src/lib/server/skills/))
 
 ## Tech Stack
 
@@ -25,6 +26,7 @@ This project is a POC to learn how to integrate [Vercel AI SDK](https://sdk.verc
   - `@ai-sdk/openai-compatible` — OpenAI-compatible provider (connected to OpenCode Go — DeepSeek V4 Flash)
   - `@ai-sdk/svelte` — Svelte integration
 - **Validation**: [Zod](https://zod.dev) v4
+- **Skill architecture**: skills are implemented as AI SDK `tool` definitions (not `HarnessAgent`) — the Vercel AI SDK `HarnessAgent` was evaluated but deemed unsuitable for a chat context as it is designed for coding agent harnesses (sandboxed terminal environments), not streaming chat conversations
 
 ## AI-Assisted Development
 
@@ -38,7 +40,7 @@ This project was developed using:
 - [x] Setup SvelteKit SSR
 - [x] First AI SDK integration — minimalistic web chat
 - [x] Implement a tool to read from the PostgreSQL database
-- [ ] Implement a skill system
+- [x] Implement a skill system
 - [ ] Add a button to generate a conversation title
 - [ ] Add a button to compact the conversation
 
