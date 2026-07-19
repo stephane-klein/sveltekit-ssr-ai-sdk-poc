@@ -2,6 +2,12 @@
 
 This project is a POC to learn how to integrate [Vercel AI SDK](https://sdk.vercel.ai) into a SvelteKit SSR project with a tool that allows the AI agent to read from a PostgreSQL database.
 
+## Features
+
+- **AI Chat interface** — chat UI with conversation list and message history
+- **AI SQL tool** — `readOnlySqlQuery` tool that lets the LLM query the `contacts` table using raw SQL
+- **Streaming responses** — real-time token-by-token streaming for a responsive chat experience
+
 ## Tech Stack
 
 - **Frontend**: SvelteKit 2 (SSR) + Svelte 5 + Vite 8
@@ -32,6 +38,7 @@ This project was developed using:
 - [x] Setup SvelteKit SSR
 - [x] First AI SDK integration — minimalistic web chat
 - [x] Implement a tool to read from the PostgreSQL database
+- [ ] Implement a skill system
 
 ## Prerequisite
 
