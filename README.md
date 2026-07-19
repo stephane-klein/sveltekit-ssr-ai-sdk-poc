@@ -39,6 +39,8 @@ This project was developed using:
 - [x] First AI SDK integration — minimalistic web chat
 - [x] Implement a tool to read from the PostgreSQL database
 - [ ] Implement a skill system
+- [ ] Add a button to generate a conversation title
+- [ ] Add a button to compact the conversation
 
 ## Prerequisite
 
