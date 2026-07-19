@@ -8,6 +8,7 @@ This project is a POC to learn how to integrate [Vercel AI SDK](https://sdk.verc
 - **AI SQL tool** — `readOnlySqlQuery` tool that lets the LLM query the `contacts` table using raw SQL
 - **Streaming responses** — real-time token-by-token streaming for a responsive chat experience
 - **Skill system** — OpenCode-inspired skills reproduced as AI SDK tools: the LLM discovers available skills by name and description, then loads them on demand via a `loadSkill` tool (see [src/lib/server/skills/](./src/lib/server/skills/))
+- **Conversation title generation** — a button in the chat page that uses the LLM to generate a concise title from the conversation content, saves it to the database, and updates the UI in real time
 
 ## Tech Stack
 
@@ -41,7 +42,7 @@ This project was developed using:
 - [x] First AI SDK integration — minimalistic web chat
 - [x] Implement a tool to read from the PostgreSQL database
 - [x] Implement a skill system
-- [ ] Add a button to generate a conversation title
+- [x] Add a button to generate a conversation title
 - [ ] Add a button to compact the conversation
 
 ## Prerequisite

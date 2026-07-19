@@ -23,6 +23,27 @@
   let reasoningLevel = $state('none');
   const disabled = $derived(chat.status !== 'ready');
 
+  let title = $state(data.conversation.title);
+  let generatingTitle = $state(false);
+
+  async function generateTitle() {
+    if (generatingTitle || disabled) return;
+    generatingTitle = true;
+    try {
+      const response = await fetch(`/chats/${data.conversation.slug}/generate-title`, {
+        method: 'POST',
+      });
+      const result = await response.json();
+      if (response.ok) {
+        title = result.title;
+      }
+    } catch {
+      console.error('Failed to generate title');
+    } finally {
+      generatingTitle = false;
+    }
+  }
+
   let messageTimings = $state({});
   let requestStartTime = $state(null);
   let streamingStartTime = $state(null);
@@ -119,7 +140,13 @@
   }
 </script>
 
-<h1><a href="/chats">Chats</a> / {data.conversation.slug}</h1>
+<h1>
+  <a href="/chats">Chats</a> / {data.conversation.slug}
+  <span class="title-display">— {title}</span>
+  <button onclick={generateTitle} disabled={generatingTitle || disabled} class="generate-title-btn">
+    {generatingTitle ? 'Generating...' : 'Generate title'}
+  </button>
+</h1>
 
 <div class="chat-messages">
   {#each chat.messages as message, messageIndex (messageIndex)}
@@ -337,5 +364,31 @@
     color: #666;
     font-style: italic;
     font-size: 0.875rem;
+  }
+
+  .title-display {
+    font-weight: 400;
+    color: #555;
+  }
+
+  .generate-title-btn {
+    margin-left: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    background: #f0f0f0;
+    color: #333;
+    font-size: 0.75rem;
+    cursor: pointer;
+    vertical-align: middle;
+  }
+
+  .generate-title-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .generate-title-btn:not(:disabled):hover {
+    background: #e0e0e0;
   }
 </style>
